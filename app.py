@@ -1,16 +1,15 @@
-from flask import Flask
-import os
+import gradio as gr
 
-app = Flask(__name__)
+# Define a simple function
+def greet(name):
+    return f"Hello, {name}! Welcome to Azure + Gradio."
 
-@app.route("/")
-def index():
-    return "Hello from Azure App Service!"
+# Build Gradio interface
+demo = gr.Interface(fn=greet, inputs="text", outputs="text")
 
-@app.route("/health")
-def health():
-    return "OK"
+# Expose Gradio app as WSGI callable for Gunicorn
+app = demo.app
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Azure expects 8000
-    app.run(host="0.0.0.0", port=port)
+    # Local testing
+    demo.launch(server_name="0.0.0.0", server_port=8000
